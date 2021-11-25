@@ -1,6 +1,6 @@
 @extends('templates.main')
 
-
+@section('breadcumb'){{ Breadcrumbs::render('kursus-forum-show', $thread) }}@endsection
 
 @section('content')
     <section class="bg-white">

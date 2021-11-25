@@ -111,37 +111,82 @@ use Diglactic\Breadcrumbs\Generator as BreadcrumbTrail;
         $trail->push(__('breadcrumb.course.edit'), route('course_edit', $course->slug));
     });
 
-    Breadcrumbs::for('kursus-forum-index', function (BreadcrumbTrail $trail, $course) {
-        $trail->parent('kursus-show', $course);
-        $trail->push(__('breadcrumb.course.forum'), route('course_forum', $course->slug));
-    });
-
     Breadcrumbs::for('kursus-ulasan-index', function (BreadcrumbTrail $trail, $course) {
         $trail->parent('kursus-show', $course);
         $trail->push(__('breadcrumb.course.ulasan'), route('course_forum', $course->slug));
     });
 
-    Breadcrumbs::for('kursus-bab', function (BreadcrumbTrail $trail, $course) {
-        $trail->parent('kursus-edit', $course);
-        $trail->push(__('breadcrumb.bab.index'));
+    // Bab
+    Breadcrumbs::for('kursus-bab', function (BreadcrumbTrail $trail, $course, $courseBab) {
+        $trail->parent('kursus-show', $course);
+        $trail->push($courseBab->name, route('bab_edit', [$course->slug, $courseBab->slug]));
+    });
+
+    Breadcrumbs::for('kursus-bab-create', function (BreadcrumbTrail $trail, $course) {
+        $trail->parent('kursus-show', $course);
+        $trail->push(__('breadcrumb.bab.create'));
+    });
+
+    Breadcrumbs::for('kursus-bab-edit', function (BreadcrumbTrail $trail, $course, $courseBab) {
+        $trail->parent('kursus-bab', $course, $courseBab);
+        $trail->push(__('breadcrumb.bab.edit'));
+    });
+
+    // Materi
+    Breadcrumbs::for('kursus-materi', function (BreadcrumbTrail $trail, $course, $courseBab, $courseMateri) {
+        $trail->parent('kursus-bab', $course, $courseBab);
+        $trail->push($courseMateri->name, route('materi_edit', [$course->slug, $courseMateri->bab->slug, $courseMateri->slug]));
+    });
+
+    Breadcrumbs::for('kursus-materi-create', function (BreadcrumbTrail $trail, $course, $courseBab) {
+        $trail->parent('kursus-bab', $course, $courseBab);
+        $trail->push(__('breadcrumb.materi.baru'));
+    });
+
+    Breadcrumbs::for('kursus-materi-edit', function (BreadcrumbTrail $trail, $course, $courseBab, $courseMateri) {
+        $trail->parent('kursus-materi', $course, $courseBab, $courseMateri);
+        $trail->push(__('breadcrumb.materi.edit'));
     });
 
     Breadcrumbs::for('kursus-bab-show', function (BreadcrumbTrail $trail, $course, $courseMateri) {
         $trail->parent('kursus-show', $course);
         $trail->push($courseMateri->bab->name);
     });
-
-//    Breadcrumbs::for('kursus-bab-create', function (BreadcrumbTrail $trail, $course) {
-//        $trail->parent('kursus-bab', $course);
-//        $trail->push(__('breadcrumb.bab.create'));
-//    });
-//
-//    Breadcrumbs::for('kursus-bab-edit', function (BreadcrumbTrail $trail, $course) {
-//        $trail->parent('kursus-bab', $course);
-//        $trail->push(__('breadcrumb.bab.create'));
-//    });
-
-    Breadcrumbs::for('kursus-materi', function (BreadcrumbTrail $trail, $course, $courseMateri) {
+    Breadcrumbs::for('kursus-materi-show', function (BreadcrumbTrail $trail, $course, $courseMateri) {
         $trail->parent('kursus-bab-show', $course, $courseMateri);
         $trail->push($courseMateri->name, route('course_materi', [$course->slug, $courseMateri->bab->slug, $courseMateri->slug]));
+    });
+
+    // Forum
+    Breadcrumbs::for('kursus-forum-index', function (BreadcrumbTrail $trail, $course) {
+        $trail->parent('kursus-show', $course);
+        $trail->push(__('breadcrumb.forum'), route('course_forum', $course->slug));
+    });
+
+    Breadcrumbs::for('kursus-forum-create', function (BreadcrumbTrail $trail, $course) {
+        $trail->parent('kursus-forum-index', $course);
+        $trail->push(__('breadcrumb.forum.baru'));
+    });
+
+    Breadcrumbs::for('kursus-flat', function (BreadcrumbTrail $trail, $thread) {
+        $trail->parent('kursus');
+        $trail->push($thread->course->name, route('course_show', $thread->course->slug));
+    });
+    Breadcrumbs::for('kursus-forum-flat', function (BreadcrumbTrail $trail, $thread) {
+        $trail->parent('kursus-flat', $thread);
+        $trail->push(__('breadcrumb.forum'), route('course_forum', $thread->course->slug));
+    });
+    Breadcrumbs::for('kursus-forum-show', function (BreadcrumbTrail $trail, $thread) {
+        $trail->parent('kursus-forum-flat', $thread);
+        $trail->push($thread->name, route('course_forum_show', [$thread->course->slug, $thread->slug]));
+    });
+
+    Breadcrumbs::for('kursus-forum-edit', function (BreadcrumbTrail $trail, $thread) {
+        $trail->parent('kursus-forum-show', $thread);
+        $trail->push(__('breadcrumb.forum.edit'), route('course_forum_edit_thread', [$thread->course->slug, $thread->slug]));
+    });
+
+    Breadcrumbs::for('kursus-forum-reply-edit', function (BreadcrumbTrail $trail, $thread, $id) {
+        $trail->parent('kursus-forum-show', $thread);
+        $trail->push(__('breadcrumb.forum.edit.reply'), route('course_forum_edit_reply', [$thread->course->slug, $thread->slug, $id]));
     });

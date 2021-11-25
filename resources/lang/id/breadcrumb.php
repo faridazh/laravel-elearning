@@ -24,19 +24,23 @@ return [
 
     // views/courses/bab/*
     'bab.index' => 'Bab',
-    'bab.create' => 'Baru',
+    'bab.create' => 'Bab Baru',
     'bab.edit' => 'Pembaruan',
-
-    // views/courses/forums
-    'course.forum' => 'Forum',
 
     // views/courses/reviews
     'course.ulasan' => 'Ulasan',
 
-    // views/courses/
+    // views/courses/materi
     'materi' => 'Materi',
+    'materi.baru' => 'Materi Baru',
+    'materi.edit' => 'Pembaruan',
 
+    // views/courses/forum
+    'forum' => 'Forum',
+    'forum.baru' => 'Baru',
+    'forum.edit' => 'Pembaruan',
+    'forum.edit.reply' => 'Pembaruan Balasan',
 
-    '' => '',
+    // views/courses/
     '' => '',
 ];
